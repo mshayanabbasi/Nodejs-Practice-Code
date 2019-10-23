@@ -1,4 +1,4 @@
-console.log('notes.js')
+// console.log('notes.js')
 
 const getNotes = () => {
     return "Your Notes...."
