@@ -58,21 +58,16 @@ app.patch('/users/:id', async (req, res) => {
         res.status(500).send(e)
     }
 })
-app.patch('/tasks/:id', async (req, res) => {
-    const updates = Object.keys(req.body)
-    const allowUpdates = ['completed', 'description']
-    const isValidOperation = updates.every((update) => allowUpdates.includes(update))
-    if (!isValidOperation) {
-        res.status(404).send('Invalid Updates!')
-    }
+
+app.delete('/users/:id', async (req, res) => {
     try {
-        const task = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
-        if (!task) {
+        const user = await User.findByIdAndDelete(req.params.id)
+        if (!user) {
             return res.status(404).send()
         }
-        res.send(task)
+        res.send(user)
     } catch (e) {
-        res.status(500).send(e)
+        res.status(500).send()
     }
 })
 
@@ -110,7 +105,35 @@ app.get('/tasks/:id', async (req, res) => {
     }
 })
 
+app.patch('/tasks/:id', async (req, res) => {
+    const updates = Object.keys(req.body)
+    const allowUpdates = ['completed', 'description']
+    const isValidOperation = updates.every((update) => allowUpdates.includes(update))
+    if (!isValidOperation) {
+        res.status(404).send('Invalid Updates!')
+    }
+    try {
+        const task = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
+        if (!task) {
+            return res.status(404).send()
+        }
+        res.send(task)
+    } catch (e) {
+        res.status(500).send(e)
+    }
+})
 
+app.delete('/tasks/:id', async (req, res) => {
+    try {
+        const task = await Task.findByIdAndDelete(req.params.id)
+        if (!task) {
+            res.status(404).send()
+        }
+        res.send(task)
+    } catch (e) {
+        res.status(500).send()
+    }
+})
 
 app.listen(port, () => {
     console.log('Server is up on port ' + port)
