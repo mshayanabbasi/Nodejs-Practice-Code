@@ -61,10 +61,20 @@ const jwt = require('jsonwebtoken')
 // base64 encoded json,                   payload or body,                            signature
 const myFunction = async () => {
     const token = jwt.sign({_id: 'abc123'}, 'thisismynewcourse', { expiresIn: '7 days'})
-    console.log(token)
+    // console.log(token)
 
     const data = jwt.verify(token, 'thisismynewcourse')
-    console.log(data)
+    // console.log(data)
 }
 
 myFunction()
+// const Task = require('./models/task')
+const main = async () => {
+    // const task = await Task.findById('5dfb93d99d8190249ae7f8c4')
+    // await task.populate('owner').execPopulate()
+    // console.log(task.owner)
+    const user = await User.findById('5dfb93a09d8190249ae7f8c2')
+    await user.populate('tasks').execPopulate()
+    console.log(user.tasks)
+}
+main()
